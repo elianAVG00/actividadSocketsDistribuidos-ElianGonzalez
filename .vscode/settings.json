@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "string": "cpp",
+        "tchar.h": "c",
+        "windows.h": "c",
+        "ws2tcpip.h": "c",
+        "winsock2.h": "c",
+        "xmemory": "c",
+        "stdio.h": "c"
+    }
+}
