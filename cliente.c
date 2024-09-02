@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <tchar.h>
+#include <stdbool.h>
 
 #define SIZE_BUFFER 1024
 
@@ -67,68 +68,80 @@ int main()
 
     //-------------------------------------------------------------------------------
     // Inicio menu del cliente
-
-    char buffer[SIZE_BUFFER]; 
-    char response[SIZE_BUFFER];
-    int opcion;
-
     printf("Bienvenido al Menu del Cliente\n");
-    printf("1. Generador de nombres de usuario\n");
-    printf("2. Generador de contraseñas\n");
-    printf("Elija la opcion requerida:  \n");
-    scanf("%d", &opcion);
-    printf("opcion : %d\n", opcion);
-    snprintf(buffer, SIZE_BUFFER, "U%d", opcion);
+    bool salirMenu = false;
 
-    // Enviar datos al servidor
-    send(clientSocket, buffer, sizeof(buffer), 0); // Envio opcion
+    while(!salirMenu)
+    {
+        char buffer[SIZE_BUFFER]; 
+        char response[SIZE_BUFFER];
+        int opcion;
+        printf("Las opciones son:\n");
+        printf("1. Generador de nombres de usuario\n");
+        printf("2. Generador de contraseñas\n");
+        printf("0. Salir\n");
+        printf("Elija la opcion requerida:  \n");
+        scanf("%d", &opcion);
+        printf("opcion : %d\n", opcion);
 
-    if( recv(clientSocket, response, sizeof(response), 0) < 0) // Recibo ok o fail del server
-	{
-        printf("recv failed");
-	}
+        if(opcion == 0){
+            salirMenu = true;
+        }
+        else{
+            snprintf(buffer, SIZE_BUFFER, "U%d", opcion);
 
-    if(strcmp(response, "ok\n") == 0){
-        if(opcion == 1){
-            int longitud;
-            printf("Generar nombre de usuario\n");
-            printf("Ingrese la longitud deseada: ");
-            scanf("%d", &longitud);
+            // Enviar datos al servidor
+            send(clientSocket, buffer, sizeof(buffer), 0); // Envio opcion
 
-            snprintf(buffer, SIZE_BUFFER, "U%d", longitud);
-            // Enviar longuitud al servidor
-            send(clientSocket, buffer, sizeof(buffer), 0);
-            memset(buffer, 0, sizeof(buffer));
-
-            // Leer respuesta del servidor
-            if( recv(clientSocket, response, SIZE_BUFFER, 0) < 0)
+            if( recv(clientSocket, response, sizeof(response), 0) < 0) // Recibo ok o fail del server
             {
                 printf("recv failed");
             }
-        }
-        else if(opcion == 2){
+
             if(strcmp(response, "ok\n") == 0){
-                int longitud;
-                printf("Generar contraseña\n");
-                printf("Ingrese la longitud deseada: ");
-                scanf("%d", &longitud);
+                if(opcion == 1){
+                    int longitud;
+                    printf("Generar nombre de usuario\n");
+                    printf("Ingrese la longitud deseada: ");
+                    scanf("%d", &longitud);
 
-                snprintf(buffer, SIZE_BUFFER, "U%d", longitud);
-                // Enviar longuitud al servidor
-                send(clientSocket, buffer, sizeof(buffer), 0);
-                memset(buffer, 0, sizeof(buffer));
+                    snprintf(buffer, SIZE_BUFFER, "U%d", longitud);
+                    // Enviar longuitud al servidor
+                    send(clientSocket, buffer, sizeof(buffer), 0);
+                    memset(buffer, 0, sizeof(buffer));
 
-                // Leer respuesta del servidor
-                if( recv(clientSocket, response, SIZE_BUFFER, 0) < 0)
-                {
-                    printf("recv failed");
+                    // Leer respuesta del servidor
+                    if( recv(clientSocket, response, SIZE_BUFFER, 0) < 0)
+                    {
+                        printf("recv failed");
+                    }
+                }
+                else if(opcion == 2){
+                    if(strcmp(response, "ok\n") == 0){
+                        int longitud;
+                        printf("Generar contraseña\n");
+                        printf("Ingrese la longitud deseada: ");
+                        scanf("%d", &longitud);
+
+                        snprintf(buffer, SIZE_BUFFER, "U%d", longitud);
+                        // Enviar longuitud al servidor
+                        send(clientSocket, buffer, sizeof(buffer), 0);
+                        memset(buffer, 0, sizeof(buffer));
+
+                        // Leer respuesta del servidor
+                        if( recv(clientSocket, response, SIZE_BUFFER, 0) < 0)
+                        {
+                            printf("recv failed");
+                        }
+                    }
                 }
             }
+
+            printf("Respuesta del servidor:     %s\n", response);
+            WSACleanup();
         }
     }
 
-    printf("Respuesta del servidor:     %s\n", response);
-    WSACleanup();
     closesocket(clientSocket);
     printf("Fin de la conexion\n");
     system("pause");
