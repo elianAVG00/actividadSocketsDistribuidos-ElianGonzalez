@@ -29,14 +29,14 @@ while salirMenu is False:
                 print("Ingrese la longitud deseada: ")
                 longuitud = input()
                 client_socket.send(('a' + longuitud).encode('utf-8'))
-                nombreUsuario = client_socket.recv(1024).decode('utf-8','ignore').splitlines()[0] #mejorar el problema es que recibo demasiadas cosas ademas de el nombreUsuario entonces poniendo la longuitud hago un substring para que solo traiga el largo de la palabra q necesito, pero deberia ver como hacer para q el encode lo haga solo
+                nombreUsuario = client_socket.recv(1024).decode('utf-8','ignore').splitlines()[0] 
                 print("Respuesta del servidor: " + nombreUsuario)
             elif opcion[1:] == "2":
                 print("Generar contraseña")
                 print("Ingrese la longitud deseada: ")
                 longuitud =  'a' + input()
                 client_socket.send(longuitud.encode('utf-8'))
-                contraseña = client_socket.recv(1024).decode('utf-8','ignore').splitlines()[0] #mejorar
+                contraseña = client_socket.recv(1024).decode('utf-8','ignore').splitlines()[0] 
                 print("Respuesta del servidor: " + contraseña)
         else:
             print(respuestaOpcion)
