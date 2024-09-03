@@ -1,10 +1,10 @@
 import socket
 
-ip = "192.168.0.8"  # as both code is running on same pc
-puerto = 8888  # socket server port number0
+ip = "192.168.0.8"  
+puerto = 8888  
 
-client_socket = socket.socket()  # instantiate
-client_socket.connect((ip, puerto))  # connect to the server
+client_socket = socket.socket() 
+client_socket.connect((ip, puerto))  # conecto al server
 salirMenu = False
 
 print("Bienvenido al Menu del Cliente")
